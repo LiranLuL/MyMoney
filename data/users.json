@@ -1,0 +1,38 @@
+[
+    {
+        "firstName": "Alex",
+        "lastName": "Bobrow",
+        "username": "1",
+        "hash": "$2a$10$JORGR9z/tMF8RaVddywkheFaTWZPeLsyBHynNj7vyVIh1o59v./Vi",
+        "id": 1,
+        "dateCreated": "2022-06-11T13:24:11.041Z",
+        "dateUpdated": "2022-06-11T13:24:11.041Z"
+    },
+    {
+        "firstName": "2",
+        "lastName": "2",
+        "username": "3",
+        "hash": "$2a$10$wwio4wrBF6t53wW2Pbnwg.5XOpWzUTElNGkJimejnH0DkLv5NObTO",
+        "id": 2,
+        "dateCreated": "2022-06-11T16:02:49.686Z",
+        "dateUpdated": "2022-06-11T16:02:49.686Z"
+    },
+    {
+        "firstName": "R",
+        "lastName": "R",
+        "username": "R",
+        "hash": "$2a$10$uwfVEuJMJJqPHlo.eObU2egT9r2o7f./32Kpm51Om4um2byuzVyfC",
+        "id": 3,
+        "dateCreated": "2022-06-11T22:24:10.512Z",
+        "dateUpdated": "2022-06-11T22:24:10.512Z"
+    },
+    {
+        "firstName": "dsa",
+        "lastName": "dsadsa",
+        "username": "dddsadas",
+        "hash": "$2a$10$CjxC6lGWmMEQl0eFs8Y6cOlelq3DjrYRSGlJp4Db1s9MXsBeDwu0e",
+        "id": 4,
+        "dateCreated": "2022-06-12T10:30:48.560Z",
+        "dateUpdated": "2022-06-12T10:30:48.560Z"
+    }
+]

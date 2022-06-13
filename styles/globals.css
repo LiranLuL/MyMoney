@@ -1,0 +1,18 @@
+a {
+  cursor: pointer;
+}
+
+.app-container {
+  min-height: 350px;
+}
+
+@font-face {
+  font-family: "Shadows";
+  src: url("../styles/fonts/ShadowsIntoLight-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.option:hover {
+  background-color: #ff8906 !important;
+}
