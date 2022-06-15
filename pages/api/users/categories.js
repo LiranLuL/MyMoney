@@ -6,19 +6,36 @@ export default apiHandler({
   put: putUserCategory,
 });
 
+function makeUnique(array) {
+  const result = {};
+  array.forEach((elem) => {
+    if (!(elem.categorie in result)) {
+      result[elem.categorie] = elem.amount;
+    } else {
+      result[elem.categorie] += elem.amount;
+    }
+  });
+
+  const arrayResult = Object.keys(result).map((elem) => {
+    return { name: elem, amount: result[elem] };
+  });
+  return arrayResult;
+}
+
 async function getUserCategories(req, res) {
   try {
+    var { db } = await connectToDatabase();
+
     const { username } = req.body;
-    let { db } = await connectToDatabase();
-    const user = await db.collection("user").find({ username: username }).toArray();
+    const user = (await db.collection("user").find({ username: username }).toArray())[0];
     // validate
-    if (!user[0]) {
+    if (!user) {
       throw "Bad username";
     }
-
+    const categories = [user.categories, makeUnique(user.expenses)];
     // return basic user details and token
     return res.status(200).json({
-      categories: user[0].categories,
+      categories,
     });
   } catch (e) {
     throw e;
@@ -27,16 +44,20 @@ async function getUserCategories(req, res) {
 
 async function putUserCategory(req, res) {
   try {
-    const { username, amount, categorie } = req.body;
-    let { db } = await connectToDatabase();
+    var { db } = await connectToDatabase();
+
+    const { username, amount, categorie, comment, date } = req.body;
     const user = (await db.collection("user").find({ username: username }).toArray())[0];
     // validate
     if (!user) {
       throw "Bad username";
     }
-    user.categories = user.categories.filter((entry) => entry.name !== categorie);
-    user.categories.push({ name: categorie, amount: Number(amount) });
-    console.log(user);
+
+    if (!user.expenses) {
+      user.expenses = [];
+    }
+    user.expenses.push({ amount, categorie, comment, date });
+
     const updatedUser = await db.collection("user").updateOne(
       {
         username: username,

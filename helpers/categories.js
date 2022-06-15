@@ -3,11 +3,11 @@ import useGetToken from "hooks/useGetToken";
 const { publicRuntimeConfig } = getConfig();
 const url = publicRuntimeConfig.apiUrl + "/users/categories";
 
-export async function putCategorie(username, amount, categorie) {
+export async function putCategorie(username, amount, categorie, date, comment) {
   const requestOptions = {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: useGetToken() },
-    body: JSON.stringify({ username: username, amount: amount, categorie: categorie }),
+    body: JSON.stringify({ username, amount, categorie, date, comment }),
   };
 
   return fetch(url, requestOptions).then(handleResponse);
@@ -20,7 +20,6 @@ export async function getCategories(username) {
     body: JSON.stringify({ username: username }),
   };
   const result = await fetch(url, requestOptions).then(handleResponse);
- 
   return result;
 }
 

@@ -9,10 +9,10 @@ function List({ entrys }) {
   return (
     <Wrapper>
       {entrys.map((entry) => (
-        <Entry key={entry.name}>
+        <Entry key={entry.label}>
           <AiOutlineGift color="white" size={"1.5em"}/>
-          <Category>{entry.name}</Category>
-          <Price>{Number(entry.amount).toLocaleString("ru-RU", { minimumFractionDigits: 2 }) + " ₽"}</Price>
+          <Category>{entry.label}</Category>
+          <Price>{Number(entry.value).toLocaleString("ru-RU", { minimumFractionDigits: 2 }) + " ₽"}</Price>
         </Entry>
       ))}
     </Wrapper>

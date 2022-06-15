@@ -27,7 +27,6 @@ async function register(req, res) {
 
     // split out password from user details
     const { password, ...user } = req.body;
-
     let DBUsers = await db.collection("user").find({}).toArray();
 
     // validate

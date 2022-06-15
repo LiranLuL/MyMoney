@@ -26,7 +26,6 @@ export default async function handler(req, res) {
 // Getting all posts.
 async function getUser(req, res) {
   try {
-    console.log(req.body);
     let { db } = await connectToDatabase();
     let users = await db.collection("user").find({ username: req.body.username }).toArray();
     return res.json({

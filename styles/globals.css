@@ -16,3 +16,16 @@ a {
 .option:hover {
   background-color: #ff8906 !important;
 }
+
+.react-datepicker__day--selected {
+  background-color: #ff8906 !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #ff8906 !important;
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+  height: calc(1.5em + 0.75rem + 2px);
+}
