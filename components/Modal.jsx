@@ -1,5 +1,4 @@
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Dropdown from "components/Dorpdown";
 import React, { useState, useEffect, useRef } from "react";
@@ -7,77 +6,90 @@ import { putCategorie } from "helpers/categories";
 import UseGetUser from "hooks/useGetUser";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FormLabel, ModalWindow } from "styles/modalStyles";
+import {addBalance} from "services/balance.service"
 
 function ModalWin({ isShow, handleClose, categories }) {
   const [show, setShow] = useState(false);
+  const allPages = { Expenses: "Expenses", Income: "Income" };
   const amountInput = useRef(null);
   const commentInput = useRef(null);
   const [selectedValue, setSelectedValue] = useState();
   const [startDate, setStartDate] = useState(new Date());
-  const [page, setPage] = useState("Expenses");
+  const [page, setPage] = useState(allPages.Expenses);
 
   useEffect(() => {
     setShow(isShow);
   }, [isShow]);
 
   function onSaveClick() {
-    if (page === "Expenses") {
-      const amount = amountInput.current.value === "" ? -1 : Number(amountInput.current.value);
+    const amount = amountInput.current.value === "" ? -1 : Number(amountInput.current.value);
+    if (page === allPages.Expenses) {
       if (selectedValue && amount >= 0) {
         putCategorie(UseGetUser().username, amount, selectedValue.name, startDate, commentInput.current.value);
         setSelectedValue(undefined);
         handleClose();
       }
-    } else if (page === "Income") {
-      handleClose();
+    } else if (page === allPages.Income) {
+      if (amount >= 0 && amountInput.current.value !== "") {
+        addBalance(commentInput.current.value, amountInput.current.value);
+        handleClose();
+      }
     }
   }
+
   function showExpenses() {
-    setPage("Expenses");
+    setPage(allPages.Expenses);
   }
+
   function showIncome() {
-    setPage("Income");
+    setPage(allPages.Income);
   }
+
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header>
-        <Modal.Title style={{color:'#f25f4c'}} onClick={showExpenses}>Expenses</Modal.Title>
-        <Modal.Title style={{marginRight:"20px",color:'#f25f4c'}} onClick={showIncome}>Income</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {page === "Income" ? (
+    <ModalWindow show={show} onHide={handleClose}>
+      <ModalWindow.Header style={{ backgroundColor: "#16161a" }}>
+        <ModalWindow.Title style={{ color: "#ff8906" }} onClick={showExpenses}>
+          Expenses
+        </ModalWindow.Title>
+        <ModalWindow.Title style={{ marginRight: "20px", color: "#ff8906" }} onClick={showIncome}>
+          Income
+        </ModalWindow.Title>
+      </ModalWindow.Header>
+      <ModalWindow.Body style={{ backgroundColor: "#16161a" }}>
+        {page === allPages.Income ? (
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-              <Form.Label>From</Form.Label>
+              <FormLabel>From</FormLabel>
               <Form.Control ref={commentInput} type="text" placeholder="Source" />
             </Form.Group>
-            <Form.Label>How</Form.Label>
+            <FormLabel>How</FormLabel>
             <Form.Control ref={amountInput} type="text" placeholder="Amount" />
           </Form>
         ) : (
           <Form>
-            <Form.Label>Choose categories</Form.Label>
-            <Dropdown setSelectedValue={setSelectedValue} categories={categories} />
+            <FormLabel>Choose categories</FormLabel>
+            <Dropdown style={{ backgroundColor: "#FFFF" }} setSelectedValue={setSelectedValue} categories={categories} />
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-              <Form.Label>How</Form.Label>
+              <FormLabel>How</FormLabel>
               <Form.Control ref={amountInput} type="text" placeholder="Amount" />
-              <Form.Label>Date</Form.Label>
+              <FormLabel>Date</FormLabel>
               <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
-              <Form.Label>Comment</Form.Label>
+              <FormLabel>Comment</FormLabel>
               <Form.Control ref={commentInput} type="text" placeholder="Comment" />
             </Form.Group>
           </Form>
         )}
-      </Modal.Body>
-      <Modal.Footer>
+      </ModalWindow.Body>
+      <ModalWindow.Footer style={{ backgroundColor: "#16161a" }}>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
         <Button variant="primary" style={{ backgroundColor: "#ff8906" }} onClick={onSaveClick}>
           Save Changes
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </ModalWindow.Footer>
+    </ModalWindow>
   );
 }
 export { ModalWin };

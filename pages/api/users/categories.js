@@ -32,7 +32,13 @@ async function getUserCategories(req, res) {
     if (!user) {
       throw "Bad username";
     }
-    const categories = [user.categories, makeUnique(user.expenses)];
+    let categories;
+    if (user.categories && user.expenses) {
+      categories = [user.categories, makeUnique(user.expenses)];
+    } else {
+      categories = [user.categories, []];
+    }
+
     // return basic user details and token
     return res.status(200).json({
       categories,

@@ -1,4 +1,6 @@
 const UseGetUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
+  const user = localStorage.getItem("user");
+  if(!user) return "";
+  return JSON.parse(user);
 };
 export default UseGetUser;

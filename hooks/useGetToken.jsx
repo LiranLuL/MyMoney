@@ -1,5 +1,6 @@
 const useGetToken = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  return "Bearer " + user.token;
+  const user = localStorage.getItem("user");
+  if (!user) return "";
+  return "Bearer " + (JSON.parse(user)).token;
 };
 export default useGetToken;

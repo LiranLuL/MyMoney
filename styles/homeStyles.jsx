@@ -8,6 +8,16 @@ export const Wrapper = styled.div`
   height: 50vh;
 `;
 
+export const UserBalance = styled.h1`
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+`;
+
 export const RoundButton = styled.button`
   background-color: #ff8906;
   width: 14vw;
@@ -23,14 +33,17 @@ export const RoundButton = styled.button`
   max-width: 50px;
   max-height: 50px;
 `;
+
 export const Label = styled.h1`
   position: absolute;
   top: 45%;
   left: 31%;
   color: white;
 `;
-export const Logout = styled.button`
-  background-color: #f25f4c;
-  border-radius:20px;
-    
+export const Logout = styled.a`
+  color: #f25f4c;
+  margin-right: 2vw;
+  font-family: "Shadows";
+  font-weight: 500;
+  font-size: 1.5rem;
 `;

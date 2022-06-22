@@ -29,3 +29,7 @@ a {
   width: 100%;
   height: calc(1.5em + 0.75rem + 2px);
 }
+.multiselect-container {
+  background-color: white;
+}
+

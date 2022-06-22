@@ -1,18 +1,22 @@
 import dynamic from "next/dynamic";
-import { RoundButton, Label, Logout, Wrapper } from "styles/homeStyles";
+import { RoundButton, Label, Logout, Wrapper, UserBalance } from "styles/homeStyles";
 import { ModalWin } from "components/Modal";
 import { List } from "components/List";
 import { getCategories } from "helpers/categories";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import UseGetUser from "hooks/useGetUser";
-import Icons from "styles/icons/incons";
+import { Icons } from "styles/icons/incons";
 import { logout } from "services/user.service";
+import { getBalance } from "services/balance.service";
+import { convertForPieChart } from "helpers/convertData";
 const MyResponsivePie = dynamic(() => import("components/pie"), { ssr: false });
 
 function Home() {
   const [isShowModal, setIsShowModal] = useState(false);
-  const [data, setData] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [balance, setBalance] = useState(0);
   const [entrys, setEntrys] = useState([]);
+
   const showModal = () => {
     setIsShowModal(true);
   };
@@ -20,46 +24,48 @@ function Home() {
     setIsShowModal(false);
   };
 
-  const parseData = (entrys) => {
-    const data = entrys.map((entry) => {
-      return {
-        id: entry.name,
-        label: entry.name,
-        value: entry.amount,
-      };
-    });
-    setData(data);
-  };
-
-  async function fetchData() {
+  async function fetchExpenses() {
     const username = UseGetUser().username;
     const result = await getCategories(username);
-    setEntrys(result.categories[0]);
-    parseData(result.categories[1]);
+    const balance = await getBalance(username);
+    setEntrys((prev) => {
+      const equalsEntrys = JSON.stringify(prev) === JSON.stringify(result.categories[0]);
+      return equalsEntrys ? prev : result.categories[0];
+    });
+    const exp = convertForPieChart(result.categories[1]);
+    setExpenses((prev) => {
+      const equalsEntrys = JSON.stringify(prev) === JSON.stringify(exp);
+      return equalsEntrys ? prev : exp;
+    });
+    setBalance((prev) => {
+      return prev === balance.balance ? prev : balance.balance;
+    });
   }
+
   useEffect(() => {
-    fetchData();
+    window.setTimeout(fetchExpenses, 200);
   }, [isShowModal]);
 
   useEffect(() => {
-    fetchData();
-    var handle = setInterval(fetchData, 1000);
+    fetchExpenses();
+    var handle = window.setInterval(fetchExpenses, 5000);
     return () => {
       clearInterval(handle);
     };
   }, []);
+
   return (
     <>
       <Wrapper>
+        <UserBalance>{"Balance: " + balance + "р"}</UserBalance>
         <Logout onClick={logout}>Logout</Logout>
         <ModalWin handleClose={closeModal} isShow={isShowModal} categories={entrys} />
-        <MyResponsivePie data={data} />
-        {data.length === 0 && <Label>Add something</Label>}
+        <MyResponsivePie data={expenses} balance={balance} />
         <RoundButton onClick={showModal}>
           <Icons name="Plus"></Icons>
         </RoundButton>
       </Wrapper>
-      <List entrys={data} />
+      <List entrys={expenses} />
     </>
   );
 }
